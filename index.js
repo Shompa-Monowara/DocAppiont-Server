@@ -1,8 +1,11 @@
 const express = require('express')
+const dotenv = require('dotenv')
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://docAppoint:Q2hp4ydrHRMiWdjL@cluster0.oamcsmh.mongodb.net/?appName=Cluster0";
+  dotenv.config()
+  
+const uri = process.env.MONGODB_URI;
 const app = express()
-const PROT = 5000
+const PROT = process.env.PROT;
 
 const client = new MongoClient(uri, {
   serverApi: {
