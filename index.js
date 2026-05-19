@@ -1,6 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb'); // ObjectId আবার যুক্ত করা হলো
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const cors = require('cors');
 
 dotenv.config();
@@ -9,7 +9,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 5000;
 const uri = process.env.MONGODB_URI;
 
 const client = new MongoClient(uri, {
@@ -20,13 +20,15 @@ const client = new MongoClient(uri, {
   }
 });
 
+
 const db = client.db("docappointdb"); 
 const doctorsCollection = db.collection("doctors"); 
+const appointmentsCollection = db.collection("appointments"); 
 
 
 app.get("/all-appointments", async (req, res) => {
   try {
-    const { search } = req.query;  // ✅ search
+    const { search } = req.query;
     let query = {};
 
     if (search) {
@@ -46,14 +48,15 @@ app.get("/all-appointments", async (req, res) => {
   }
 });
 
+
+
 app.get("/all-appointments/:doctorId", async (req, res) => {
   try {
     const { doctorId } = req.params;
     
-   
     const query = { _id: new ObjectId(doctorId) }; 
-    
     const result = await doctorsCollection.findOne(query);
+    
     if (!result) {
       return res.status(404).send({ message: "Doctor not found" });
     }
@@ -64,18 +67,44 @@ app.get("/all-appointments/:doctorId", async (req, res) => {
   }
 });
 
+
+
+app.post("/appointments", async (req, res) => {
+  try {
+    const bookingData = req.body;
+    
+
+    const result = await appointmentsCollection.insertOne(bookingData);
+    
+    res.status(201).send({ 
+      success: true, 
+      message: "Appointment booked successfully!", 
+      insertedId: result.insertedId 
+    });
+  } catch (error) {
+    console.error("Error saving appointment:", error);
+    res.status(500).send({ success: false, message: "Internal server error" });
+  }
+});
+
+
+
 async function run() {
   try {
     console.log("Successfully connected to MongoDB cluster!");
   } catch (error) {
-    console.error(error);
+    console.error("MongoDB Connection Error:", error);
   }
 }
 run().catch(console.dir);
 
+
+
 app.get('/', (req, res) => {
   res.send("DocAppoint Server is running fine!");
 });
+
+
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
