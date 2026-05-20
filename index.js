@@ -51,7 +51,7 @@ async function run() {
       }
     });
 
-    // Get single doctor
+   
     app.get("/all-appointments/:doctorId", async (req, res) => {
       try {
         const { doctorId } = req.params;
@@ -67,7 +67,6 @@ async function run() {
       }
     });
 
-    // Book appointment
     app.post("/appointments", async (req, res) => {
       try {
         const bookingData = req.body;
