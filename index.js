@@ -20,11 +20,9 @@ const client = new MongoClient(uri, {
   }
 });
 
-
 const db = client.db("docappointdb"); 
 const doctorsCollection = db.collection("doctors"); 
 const appointmentsCollection = db.collection("appointments"); 
-
 
 app.get("/all-appointments", async (req, res) => {
   try {
@@ -49,7 +47,6 @@ app.get("/all-appointments", async (req, res) => {
 });
 
 
-
 app.get("/all-appointments/:doctorId", async (req, res) => {
   try {
     const { doctorId } = req.params;
@@ -68,11 +65,9 @@ app.get("/all-appointments/:doctorId", async (req, res) => {
 });
 
 
-
 app.post("/appointments", async (req, res) => {
   try {
     const bookingData = req.body;
-    
 
     const result = await appointmentsCollection.insertOne(bookingData);
     
@@ -87,8 +82,6 @@ app.post("/appointments", async (req, res) => {
   }
 });
 
-
-
 async function run() {
   try {
     console.log("Successfully connected to MongoDB cluster!");
@@ -98,13 +91,9 @@ async function run() {
 }
 run().catch(console.dir);
 
-
-
 app.get('/', (req, res) => {
   res.send("DocAppoint Server is running fine!");
 });
-
-
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
