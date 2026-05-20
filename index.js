@@ -83,7 +83,7 @@ async function run() {
       }
     });
 
-    // Get appointments by email
+    
     app.get("/appointments", async (req, res) => {
       try {
         const email = req.query.email;
@@ -98,7 +98,7 @@ async function run() {
       }
     });
 
-    // Delete appointment
+    
     app.delete("/appointments/:id", async (req, res) => {
       try {
         const { id } = req.params;
