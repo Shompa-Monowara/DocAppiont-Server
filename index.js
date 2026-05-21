@@ -26,7 +26,6 @@ const client = new MongoClient(uri, {
 
 const JWKS = createRemoteJWKSet(new URL(`${process.env.CLIENT_URL}/api/auth/jwks`));
 
-// 🛡️ JWT Verification Middleware
 const verifyToken = async (req, res, next) => {
   const authHeader = req?.headers.authorization;
   if (!authHeader) {
